@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 {{-- BEGIN: Head --}}
@@ -8,14 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
 
-    <title>{{ $title ?? 'Dashboard' }} - E Learning</title>
 
+    <title>{{ $title ?? 'Dashboard' }}</title>
+    
     <link rel="apple-touch-icon" href="{{ ui_asset('images/ico/apple-icon-120.png') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ ui_asset('images/ico/favicon.ico') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
 
     {{-- BEGIN: Vendor CSS --}}
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/vendors.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/charts/apexcharts.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/extensions/toastr.min.css') }}">
     {{-- END: Vendor CSS --}}
 
@@ -24,35 +25,40 @@
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/bootstrap-extended.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/colors.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/components.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/themes/dark-layout.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/themes/bordered-layout.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/themes/semi-dark-layout.css') }}">
 
     {{-- BEGIN: Page CSS --}}
-    <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/core/menu/menu-types/vertical-menu.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/core/menu/menu-types/horizontal-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/pages/dashboard-ecommerce.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/plugins/charts/chart-apex.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/plugins/extensions/ext-component-toastr.css') }}">
     {{-- END: Page CSS --}}
 
     {{-- BEGIN: Custom CSS --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     {{-- END: Custom CSS --}}
+
 </head>
 {{-- END: Head --}}
 
 {{-- BEGIN: Body --}}
-<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+
+<body class="horizontal-layout horizontal-menu  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="">
+
+
+
 
     {{-- BEGIN: Header --}}
-    
-    @include('layouts.admin.header')
-
+    @include('layouts.app.header')
     {{-- END: Header --}}
 
 
     {{-- BEGIN: Main Menu --}}
-    
-    @include('layouts.admin.menu')
-
+    @include('layouts.app.menu')
     {{-- END: Main Menu --}}
+
 
 
     {{-- BEGIN: Main Content --}}
@@ -62,6 +68,7 @@
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper container-xxl p-0">
 
+            <x-breadchumb></x-breadchumb>
             {{ $slot }}
         </div>
     </div>
@@ -69,23 +76,14 @@
     {{-- END: Main Content --}}
 
 
-     <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
-
-    <!-- BEGIN: Footer-->
-    <footer class="footer footer-static footer-light">
-        <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2021<a class="ml-25" href="/" target="_blank">E Learning</a><span class="d-none d-sm-inline-block">, All rights Reserved</span></span><span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i data-feather="heart"></i></span></p>
-    </footer>
-    <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
-    <!-- END: Footer-->
-
     {{-- BEGIN: Vendor JS --}}
     <script src="{{ ui_asset('vendors/js/vendors.min.js') }}"></script>
     {{-- BEGIN Vendor JS --}}
 
     {{-- BEGIN: Page Vendor JS --}}
+    <script src="{{ ui_asset('vendors/js/ui/jquery.sticky.js') }}"></script>
+    <script src="{{ ui_asset('vendors/js/charts/apexcharts.min.js') }}"></script>
     <script src="{{ ui_asset('vendors/js/extensions/toastr.min.js') }}"></script>
-    @stack('js_vendor')
     {{-- END: Page Vendor JS --}}
 
     {{-- BEGIN: Theme JS --}}
@@ -93,8 +91,9 @@
     <script src="{{ ui_asset('js/core/app.js') }}"></script>
     {{-- END: Theme JS --}}
 
-
-    @routes
+    {{-- BEGIN: Page JS --}}
+    <script src="{{ ui_asset('js/scripts/pages/dashboard-ecommerce.js') }}"></script>
+    {{-- END: Page JS --}}
 
     <script>
         $(window).on('load', function() {
@@ -106,8 +105,6 @@
             }
         })
     </script>
-
-    @stack('js_page')
 </body>
 {{-- END: Body --}}
 

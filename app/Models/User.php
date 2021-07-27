@@ -6,10 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, 
+        Notifiable,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -40,4 +44,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+
+    /**
+     * The id of admin role
+     * 
+     * @var integer
+     */
+    public const ADMIN = 1 ;
+
+
+    public function getLoginMessageAttribute(){
+
+        $message = "Selamat datang {$this->name}";
+
+        if($this->role == self::ADMIN){
+            $message .= ", Anda login sebagai admin";
+        }
+
+        return $message;
+    }
+
+
+    public function getIsAdminAttribute(){
+        return $this->role == self::ADMIN;
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class);
+    }
 }
