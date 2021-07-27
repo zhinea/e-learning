@@ -112,7 +112,8 @@
                                                name="email" 
                                                placeholder="bambank@e-learning.test" aria-describedby="email" 
                                                autofocus="" 
-                                               tabindex="1" />
+                                               tabindex="1"
+                                               value="{{ old('email') }}" />
 
                                         @error('email')
                                             <span class="error"> {{ $message }}</span>
@@ -131,7 +132,8 @@
                                                    name="password" 
                                                    placeholder="············" 
                                                    aria-describedby="password" 
-                                                   tabindex="2" />
+                                                   tabindex="2"
+                                                    />
                                             <div class="input-group-append"><span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span></div>
                                             
                                             @error('password')

@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Menu extends Model
+{
+    use HasFactory;
+
+
+    protected $fillable = [
+        'title',
+        'icon',
+        'link',
+        'parent_id'
+    ];
+
+
+
+    public function childs(){
+        return $this->hasMany(\App\Models\Menu::class, 'parent_id', 'id');
+    }
+
+    
+}
