@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
+use App\Models\User;
+use App\Models\Role;
 
 class UsersController extends Controller
 {
@@ -12,11 +15,22 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        
+        if($request->ajax()){
+            $user_instance = User::query()
+                                ->with('roles')
+                                ->orderByDesc('created_at');
 
-        return view('admin.pages.users.index');
+            return datatables()->eloquent($user_instance)
+                    ->addIndexColumn()   
+                    ->make(true);
+
+        }
+
+        $roles = Role::latest()->get();
+
+        return view('admin.pages.users.index', compact('roles'));
     }
 
     /**

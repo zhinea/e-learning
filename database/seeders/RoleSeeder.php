@@ -16,10 +16,14 @@ class RoleSeeder extends Seeder
     {
         $roles = [
             [
-                'title' => 'Admin'
+                'title' => 'Admin',
+                'icon' => 'slack',
+                'color' => 'primary'
             ],
             [
-                'title' => 'User'
+                'title' => 'User',
+                'icon' => 'user',
+                'color' => 'warning'
             ]
         ];
 
