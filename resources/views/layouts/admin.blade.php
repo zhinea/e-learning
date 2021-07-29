@@ -17,6 +17,8 @@
     {{-- BEGIN: Vendor CSS --}}
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/vendors.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/extensions/toastr.min.css') }}">
+
+    @stack('css_vendor')
     {{-- END: Vendor CSS --}}
 
     {{-- BEGIN: Theme CSS --}}
@@ -30,6 +32,8 @@
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/pages/dashboard-ecommerce.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/plugins/extensions/ext-component-toastr.css') }}">
+
+    @stack('css_page')
     {{-- END: Page CSS --}}
 
     {{-- BEGIN: Custom CSS --}}
@@ -85,6 +89,8 @@
 
     {{-- BEGIN: Page Vendor JS --}}
     <script src="{{ ui_asset('vendors/js/extensions/toastr.min.js') }}"></script>
+    <script src="{{ asset('js/toastr-ext.js') }}"></script>
+
     @stack('js_vendor')
     {{-- END: Page Vendor JS --}}
 

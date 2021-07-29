@@ -8,16 +8,22 @@ class VerticalSingleMenu extends Component
 {
 
     public $href;
+
+    public $active;
+        
     public $icon;
+
+
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($href, $icon)
+    public function __construct(String $href, $active, String$icon)
     {
         $this->href = $href;
+        $this->active = $active;
         $this->icon = $icon;
     }
 
