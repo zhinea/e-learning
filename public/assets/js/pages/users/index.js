@@ -2,8 +2,6 @@
 
 	'use strict';
 
-	console.log('ok loaded')
-
 	// Format icon
     function iconFormat(icon) {
 	    let originalOption = icon.element;
@@ -18,7 +16,7 @@
 
 	$(document).ready(function(){
 	
-		$(".user-list-table").DataTable({
+		var UserTable = $(".user-list-table").DataTable({
 			processing: true,
 	        serverSide: true,
 	        ajax: route('staff.management.users.index'),
@@ -47,6 +45,28 @@
 			      orderable: false,
 			      render: function (data, type, full, meta) {
 			       
+			      	return `
+			      		<div class="btn-group">
+			        		<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+			        			${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })} 
+			        		</a>
+				        	<div class="dropdown-menu dropdown-menu-right">
+					        	<a href="${ route('staff.management.users.show', { user: full.id }) }" class="dropdown-item">
+					        		${feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' })}
+					        		Details
+					        	</a>
+					        	<a href="${ route('staff.management.users.edit', { user: full.id }) }" class="dropdown-item">
+					        		${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })}
+					          		Edit
+					          	</a>
+					        	<a href="javascript:;" class="dropdown-item delete-user" data-id="${ full.id }">
+					        		${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })}  
+					          		Delete
+					          	</a>
+				        	</div>
+			        	</div>
+			      	`;
+
 			        return (
 			          '<div class="btn-group">' +
 			          '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
@@ -63,7 +83,7 @@
 			          '<a href="" class="dropdown-item">' +
 			          feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) +
 			          'Edit</a>' +
-			          '<a href="javascript:;" class="dropdown-item delete-record">' +
+			          '<a href="javascript:;" class="dropdown-item delete-user">' +
 			          feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
 			          'Delete</a></div>' +
 			          '</div>' +
@@ -96,7 +116,7 @@
 		          className: 'add-new btn btn-primary mt-50',
 		          attr: {
 		            'data-toggle': 'modal',
-		            'data-target': '#modals-slide-in'
+		            'data-target': '.new-user-modal'
 		          },
 		          init: function (api, node, config) {
 		            $(node).removeClass('btn-secondary');
@@ -108,7 +128,7 @@
 		        details: {
 		          display: $.fn.dataTable.Responsive.display.modal({
 		            header: function (row) {
-		              var data = row.data();
+		              let data = row.data();
 		              return 'Details of ' + data['name'];
 		            }
 		          }),
@@ -118,7 +138,7 @@
 		            columnDefs: [
 		              {
 		                targets: 2,
-		                visible: false
+		                visible: true
 		              },
 		              {
 		                targets: 3,
@@ -152,12 +172,102 @@
 		})();
 
 
-		
+		$('.add-new-user').submit(function(e){
+			e.preventDefault();
+
+			let $form = this;
+			let data = $(this).serialize();
+
+			$.ajax(route('staff.management.users.store'),{
+				method: 'post',
+				data,
+				dataType: 'json', 
+			})
+			.done(res => {
+				$($form).trigger('reset');
+				$('#user-roles').val(null).trigger('change');
+				$('.modal-body input.is-invalid').removeClass('is-invalid');
+
+				$('.new-user-modal').modal('hide');
+
+				let toastStatus = (res.status) ? 'success' : 'error';
+				let toastMsg = (res.status) ? res.message : 'Terjadi masalah, harap coba lagi!';
+
+				$.fn.toast(toastStatus, 'Info', toastMsg);
+
+				UserTable.ajax.reload();
+			})
+			.fail(er => {
+				$('.modal-body input.is-invalid').removeClass('is-invalid');
+				
+				if(er.status != 422){
+					$.fn.toast('error', 'Error', 'Sorry something wrong in here.');
+				}
+
+				$.fn.toast('warning', 'Warning', 'Silahkan isi input lagi dengan benar!');
+
+				if(typeof er.responseJSON.errors !== 'undefined'){
+
+					$.each(er.responseJSON.errors, (key, value) => {
+						console.log(key, value)
+						$(`input[name="${key}"]`).addClass('is-invalid');
+						$(`.er-${key}`).text(value)
+					})
+				}
+
+			})
+		});
+
+		$(document).on('click', '.delete-user', function(e){
+			e.preventDefault();
+
+			let id = $(this).data('id');
+
+			let $toast = $.fn.toast(
+							'warning',
+							'Apakah Anda Yakin?',
+							'Data yang sudah di hapus dapat dikembalikan! <br/><br/><button class="btn btn-warning btn-sm mr-1 confirm-delete">Yes, hapus</button><button class="btn btn-none btn-sm confirm-cancel">Cancel</button>', {
+								closeButton: true,
+						        timeOut: 10000,
+						        tapToDismiss: false,
+							});
+
+			if($toast.find('.btn').length){
+				$toast.delegate('.confirm-delete', 'click', () => {
+					
+					$.fn.toast.delete($toast);
+        			$toast = undefined;
+
+        			$.ajax(route('staff.management.users.destroy', { user: id }), {
+        				method: "delete",
+        				dataType: 'json'
+        			})
+        			.done(res => {
+
+        				let toastStatus = (res.status) ? 'success' : 'error';
+						let toastMsg = (res.status) ? res.message : 'Terjadi masalah, harap coba lagi!';
+
+						$.fn.toast(toastStatus, 'Info', toastMsg);
+
+						UserTable.ajax.reload();
+        			})
+        			.fail(er => {
+        				console.error(er);
+        			})
+				});
+
+				$toast.delegate('.confirm-cancel', 'click', () => {
+					toastr.clear($toast, { force: true });
+        			$toast = undefined;
+				});
+			}
+
+		})
 
 		
 		  
 
-	})
+	});
 
 
 })(window, jQuery);

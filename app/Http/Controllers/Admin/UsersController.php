@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\Models\User;
 use App\Models\Role;
+use App\Traits\Authenticator;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
+    use Authenticator;
+
+
     /**
      * Display a listing of the resource.
      *
@@ -51,7 +56,30 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|string|min:5|max:80',
+            'email' => [
+                'required',
+                'email',
+                'string',
+                Rule::unique('users')
+                        ->whereNull('deleted_at')  
+            ],
+            'password' => 'required|min:8|max:100',
+            'roles' => 'required|integer|exists:roles,id'
+        ]);
+
+        $user = User::create($request->only('name', 'email') + [
+            'password' => bcrypt($request->input('password'))
+        ]);
+
+        $user->roles()->sync($request->input('roles'));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User berhasil dibuat!'
+        ], 200);
     }
 
     /**
@@ -73,7 +101,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+
+        return view('admin.pages.users.edit');
     }
 
     /**
@@ -94,8 +124,14 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        
+        $user->delete();
+
+        return response()->json([
+            "status" => true,
+            "message" => "User berhasil di hapus!"
+        ], 200);
     }
 }

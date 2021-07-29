@@ -19,7 +19,6 @@ class AuthGates
     public function handle(Request $request, Closure $next)
     {
 
-
         if (auth()->check()){
 
             $user = auth()->user();

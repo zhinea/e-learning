@@ -89,6 +89,8 @@
 
     {{-- BEGIN: Page Vendor JS --}}
     <script src="{{ ui_asset('vendors/js/extensions/toastr.min.js') }}"></script>
+    <script src="{{ asset('js/toastr-ext.js') }}"></script>
+
     @stack('js_vendor')
     {{-- END: Page Vendor JS --}}
 
