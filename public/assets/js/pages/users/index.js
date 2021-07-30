@@ -28,15 +28,7 @@
 			    { name: 'users.role', searchable: false, orderable: false  },
 			    { data: '', searchable: false }
 		  	],
-		  	dom:
-		        '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-		        '<"col-lg-12 col-xl-6" l>' +
-		        '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
-		        '>t' +
-		        '<"d-flex justify-content-between mx-2 row mb-1"' +
-		        '<"col-sm-12 col-md-6"i>' +
-		        '<"col-sm-12 col-md-6"p>' +
-		        '>',
+		  	dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
 		    columnDefs: [
 		    	{
 			      // Actions
@@ -110,19 +102,59 @@
 			    }
 		    ],
 		    // Buttons with Dropdown
-		      buttons: [
+		    buttons: [
+				      {
+		          extend: 'collection',
+		          className: 'btn btn-outline-secondary dropdown-toggle mr-2',
+		          text: feather.icons['share'].toSvg({ class: 'font-small-4 mr-50' }) + 'Export',
+		          buttons: [
+		            {
+		              
+		              text: feather.icons['printer'].toSvg({ class: 'font-small-4 mr-50' }) + 'Print',
+		              className: 'dropdown-item',
+		            },
+		            {
+		            
+		              text: feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) + 'Csv',
+		              className: 'dropdown-item',
+		            },
+		            {
+		              
+		              text: feather.icons['file'].toSvg({ class: 'font-small-4 mr-50' }) + 'Excel',
+		              className: 'dropdown-item',
+		            },
+		            {
+		              
+		              text: feather.icons['clipboard'].toSvg({ class: 'font-small-4 mr-50' }) + 'Pdf',
+		              className: 'dropdown-item',
+		            },
+		            {
+		              
+		              text: feather.icons['copy'].toSvg({ class: 'font-small-4 mr-50' }) + 'Copy',
+		              className: 'dropdown-item',
+		            }
+		          ],
+		          init: function (api, node, config) {
+		            $(node).removeClass('btn-secondary');
+		            $(node).parent().removeClass('btn-group');
+		            setTimeout(function () {
+		              $(node).closest('.dt-buttons').removeClass('btn-group').addClass('d-inline-flex');
+		            }, 50);
+		          }
+		        },
 		        {
-		          text: 'Add New User',
-		          className: 'add-new btn btn-primary mt-50',
+		          text: feather.icons['plus'].toSvg({ class: 'mr-50 font-small-4' }) + 'Add New Record',
+		          className: 'add-new btn btn-primary ',
 		          attr: {
 		            'data-toggle': 'modal',
 		            'data-target': '.new-user-modal'
 		          },
 		          init: function (api, node, config) {
+		           
 		            $(node).removeClass('btn-secondary');
 		          }
 		        }
-		      ],
+		    ],
 		      // For responsive popup
 		      responsive: {
 		        details: {
@@ -177,6 +209,11 @@
 
 			let $form = this;
 			let data = $(this).serialize();
+			let $submitButton = $('#submit-new-user')
+			
+			$submitButton.attr('disabled', true);
+			$submitButton.find('.main-text').hide();
+			$submitButton.find('.loader').show();
 
 			$.ajax(route('staff.management.users.store'),{
 				method: 'post',
@@ -187,6 +224,10 @@
 				$($form).trigger('reset');
 				$('#user-roles').val(null).trigger('change');
 				$('.modal-body input.is-invalid').removeClass('is-invalid');
+
+				$submitButton.removeAttr('disabled');
+				$submitButton.find('.main-text').show();
+				$submitButton.find('.loader').hide();
 
 				$('.new-user-modal').modal('hide');
 
@@ -263,6 +304,15 @@
 			}
 
 		})
+
+		$('.new-user-modal').on('hidden.bs.modal', () => {
+
+			let $submitButton = $('#submit-new-user')
+			
+			$submitButton.removeAttr('disabled');
+			$submitButton.find('.main-text').show();
+			$submitButton.find('.loader').hide();
+		});
 
 		
 		  
