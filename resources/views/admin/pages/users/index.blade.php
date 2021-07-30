@@ -5,9 +5,11 @@
 		<link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
-
+        <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/tables/datatable/rowGroup.bootstrap4.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/forms/select/select2.min.css') }}">
-	@endpush
+        {{-- <link rel="stylesheet" type="text/css" href="{{ ui_asset('css/bootstrap-extended.css') }}"> --}}
+	
+    @endpush
 
 	<x-minimal-breadchumb />
 
@@ -101,7 +103,15 @@
                                     <span class="invalid-feedback er-password"></span>
                                 </div>
                              
-                                <button type="submit" class="btn btn-primary mr-1">Submit</button>
+                                <button type="submit" class="btn btn-primary mr-1" id="submit-new-user">
+                                    <span class="loader" style="display: none;">
+                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            <span class="ml-25 align-middle">Loading...</span>
+                                    </span>
+                                    <span class="main-text">
+                                        Submit
+                                    </span>
+                                </button>
                                 <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
                             </div>
                         </form>
@@ -117,14 +127,24 @@
 	@once
 
 		@push('js_vendor')
-			<script src="{{ ui_asset('vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
+	{{-- 		<script src="{{ ui_asset('vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
 			<script src="{{ ui_asset('vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
 			<script src="{{ ui_asset('vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
 			<script src="{{ ui_asset('vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script>
 			<script src="{{ ui_asset('vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
 			<script src="{{ ui_asset('vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/buttons.html5.min.js') }}"></script> --}}
+
+            <script src="{{ ui_asset('vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+            <script src="{{ ui_asset('vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+
             <script src="{{ ui_asset('vendors/js/forms/select/select2.full.min.js') }}"></script>
-		@endpush
+        @endpush
 		
 
 

@@ -63,8 +63,7 @@ class UsersController extends Controller
                 'required',
                 'email',
                 'string',
-                Rule::unique('users')
-                        ->whereNull('deleted_at')  
+                Rule::unique('users')->withoutTrashed()
             ],
             'password' => 'required|min:8|max:100',
             'roles' => 'required|integer|exists:roles,id'
@@ -99,11 +98,11 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        
+        $user->load('roles');
 
-        return view('admin.pages.users.edit');
+        return view('admin.pages.users.edit', compact('user'));
     }
 
     /**

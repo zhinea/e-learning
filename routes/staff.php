@@ -12,5 +12,8 @@ Route::group([
 	'as'     => 'management.'
 	], function(){
 
+
+		Route::get('users/restore', [Admin\UsersController::class, 'restore'])
+				->name('users.restore');
 		Route::resource('users', Admin\UsersController::class);
 	});
