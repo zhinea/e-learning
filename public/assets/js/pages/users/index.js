@@ -3,16 +3,16 @@
 	'use strict';
 
 	// Format icon
-    function iconFormat(icon) {
-	    let originalOption = icon.element;
-	    if (!icon.id) {
-	      return icon.text;
-	    }
+  function iconFormat(icon) {
+    let originalOption = icon.element;
+    if (!icon.id) {
+      return icon.text;
+    }
 
-	    let $icon = feather.icons[$(icon.element).data('icon')].toSvg({ class: `text-${$(icon.element).data('color')}` }) + icon.text;
+    let $icon = feather.icons[$(icon.element).data('icon')].toSvg({ class: `text-${$(icon.element).data('color')}` }) + icon.text;
 
-	    return $icon;
-  	}
+    return $icon;
+	}
 
 	$(document).ready(function(){
 	

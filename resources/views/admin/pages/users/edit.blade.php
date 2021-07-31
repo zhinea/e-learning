@@ -1,5 +1,9 @@
 <x-admin-layout title="Edit {{ $user->name }}">
 	
+    @push('css_vendor')
+        <link rel="stylesheet" type="text/css" href="{{ ui_asset('vendors/css/forms/select/select2.min.css') }}">
+    @endpush
+
 	<x-minimal-breadchumb />
 
 	<x-body>
@@ -35,7 +39,11 @@
                                 <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                     <!-- users edit media object start -->
                                     <div class="media mb-2">
-                                        <img src="../../../app-assets/images/avatars/7.png" alt="users avatar" class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer" height="90" width="90" />
+                                        <img src="{{ usercontent('photo/' . $user->photo_profile) }}" 
+                                             alt="users avatar" 
+                                             class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer" 
+                                             height="90" 
+                                             width="90" />
                                         <div class="media-body mt-50">
                                             <h4>{{ $user->name }}</h4>
                                             <div class="col-12 d-flex mt-1 px-0">
@@ -57,206 +65,76 @@
                                     <!-- users edit account form start -->
                                     <form class="form-validate">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="username">Username</label>
-                                                    <input type="text" class="form-control" placeholder="Username" value="eleanor.aguilar" name="username" id="username" />
-                                                </div>
-                                            </div>
+                                            
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="name">Name</label>
-                                                    <input type="text" class="form-control" placeholder="Name" value="Eleanor Aguilar" name="name" id="name" />
+                                                    <input type="text" 
+                                                           class="form-control" 
+                                                           placeholder="Name" 
+                                                           value="{{ $user->name }}" 
+                                                           name="name" 
+                                                           id="name" />
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="email">E-mail</label>
-                                                    <input type="email" class="form-control" placeholder="Email" value="eleanor.aguilar@gmail.com" name="email" id="email" />
+                                                    <input type="email" 
+                                                           class="form-control" 
+                                                           placeholder="Email" 
+                                                           value="{{ $user->email }}"
+                                                           name="email" 
+                                                           id="email" />
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="status">Status</label>
                                                     <select class="form-control" id="status">
-                                                        <option>Active</option>
-                                                        <option>Blocked</option>
-                                                        <option>Deactivated</option>
+
+                                                        @foreach (\App\Models\User::STATUS as $status => $message)
+                                                            <option value="{{ $status }}"
+                                                                {{ 
+                                                                    (Str::is($status, $user->status)) ? 'selected' : '' 
+                                                                }}
+                                                                >
+                                                                {{ Str::ucfirst($status) }}
+                                                            </option>
+                                                            
+                                                        @endforeach
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="role">Role</label>
-                                                    <select class="form-control" id="role">
-                                                        <option>Admin</option>
-                                                        <option>User</option>
-                                                        <option>Staff</option>
-                                                    </select>
+
+                                            {{ dd($user) }}
+                                            @can('role_edit')
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="role">Role</label>
+                                                        <select class="form-control" id="role" multiple>
+                                                            
+                                                            @foreach ($roles as $role)
+
+                                                                <option value="{{ $role->id }}"
+                                                                    {{
+                                                                        (Str::is($role->id, $user->roles->id)) ? 'selected' : ''
+                                                                    }}>{{ Str::ucfirst($role->title) }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
+
+                                            @endcan
+
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="company">Company</label>
                                                     <input type="text" class="form-control" value="WinDon Technologies Pvt Ltd" placeholder="Company name" id="company" />
                                                 </div>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="table-responsive border rounded mt-1">
-                                                    <h6 class="py-1 mx-1 mb-0 font-medium-2">
-                                                        <i data-feather="lock" class="font-medium-3 mr-25"></i>
-                                                        <span class="align-middle">Permission</span>
-                                                    </h6>
-                                                    <table class="table table-striped table-borderless">
-                                                        <thead class="thead-light">
-                                                            <tr>
-                                                                <th>Module</th>
-                                                                <th>Read</th>
-                                                                <th>Write</th>
-                                                                <th>Create</th>
-                                                                <th>Delete</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Admin</td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="admin-read" checked />
-                                                                        <label class="custom-control-label" for="admin-read"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="admin-write" />
-                                                                        <label class="custom-control-label" for="admin-write"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="admin-create" />
-                                                                        <label class="custom-control-label" for="admin-create"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="admin-delete" />
-                                                                        <label class="custom-control-label" for="admin-delete"></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Staff</td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="staff-read" />
-                                                                        <label class="custom-control-label" for="staff-read"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="staff-write" checked />
-                                                                        <label class="custom-control-label" for="staff-write"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="staff-create" />
-                                                                        <label class="custom-control-label" for="staff-create"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="staff-delete" />
-                                                                        <label class="custom-control-label" for="staff-delete"></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Author</td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="author-read" checked />
-                                                                        <label class="custom-control-label" for="author-read"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="author-write" />
-                                                                        <label class="custom-control-label" for="author-write"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="author-create" checked />
-                                                                        <label class="custom-control-label" for="author-create"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="author-delete" />
-                                                                        <label class="custom-control-label" for="author-delete"></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Contributor</td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="contributor-read" />
-                                                                        <label class="custom-control-label" for="contributor-read"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="contributor-write" />
-                                                                        <label class="custom-control-label" for="contributor-write"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="contributor-create" />
-                                                                        <label class="custom-control-label" for="contributor-create"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="contributor-delete" />
-                                                                        <label class="custom-control-label" for="contributor-delete"></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>User</td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="user-read" />
-                                                                        <label class="custom-control-label" for="user-read"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="user-create" />
-                                                                        <label class="custom-control-label" for="user-create"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="user-write" />
-                                                                        <label class="custom-control-label" for="user-write"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox" class="custom-control-input" id="user-delete" checked />
-                                                                        <label class="custom-control-label" for="user-delete"></label>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                        
                                             <div class="col-12 d-flex flex-sm-row flex-column mt-2">
                                                 <button type="submit" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Save Changes</button>
                                                 <button type="reset" class="btn btn-outline-secondary">Reset</button>
@@ -478,4 +356,9 @@
                     </div>
                 </section>
 	</x-body>
+
+
+    @push('js_vendor')
+        <script src="{{ ui_asset('vendors/js/forms/select/select2.full.min.js') }}"></script>
+    @endpush
 </x-admin-layout>

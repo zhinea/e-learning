@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\AuthWithSocialite;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -63,3 +64,9 @@ Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
+
+Route::get('/auth/redirect', [AuthWithSocialite::class, 'redirect'])
+    ->name('auth.socialite');
+
+Route::get('/oauth/{client}',[AuthWithSocialite::class, 'handleCallback'])
+    ->name('auth.callback');
