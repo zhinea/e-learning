@@ -7,6 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>{{ $title ?? 'Dashboard' }} - E Learning</title>
 
@@ -85,11 +86,11 @@
 
     {{-- BEGIN: Vendor JS --}}
     <script src="{{ ui_asset('vendors/js/vendors.min.js') }}"></script>
+    <script src="{{ asset('js/setup.js') }}"></script>
     {{-- BEGIN Vendor JS --}}
 
     {{-- BEGIN: Page Vendor JS --}}
     <script src="{{ ui_asset('vendors/js/extensions/toastr.min.js') }}"></script>
-    <script src="{{ asset('js/toastr-ext.js') }}"></script>
 
     @stack('js_vendor')
     {{-- END: Page Vendor JS --}}

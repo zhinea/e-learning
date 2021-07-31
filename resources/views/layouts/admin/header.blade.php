@@ -31,7 +31,7 @@
                         </div>
                         <span class="avatar">
                             <img class="round" 
-                                 src="{{ usercontent('photo/' . auth()->user()->photo_profile) }}" 
+                                 src="{{ auth()->user()->photo_profile }}" 
                                  alt="avatar" 
                                  height="40" 
                                  width="40">

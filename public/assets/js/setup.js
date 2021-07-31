@@ -1,3 +1,5 @@
+
+// Toastr Setup
 (function(window, $){
 
 	/**
@@ -36,5 +38,24 @@
 
 		return window.toastr.clear(element, $options);
 	}
-
 })(window, jQuery);
+
+
+// Ajax Setup
+(function($){
+	
+	$.ajaxSetup({
+	    headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    }
+	});
+})(jQuery);
+
+
+// String Protype
+(function($s){
+
+	$s.toTitleCase = function () {
+	    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	};
+})(String.prototype);

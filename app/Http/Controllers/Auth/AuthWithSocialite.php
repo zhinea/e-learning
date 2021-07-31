@@ -28,7 +28,7 @@ class AuthWithSocialite extends Controller
 
         $user = $this->_findOrCreate($userSocialite, $client);
 
-        Auth::login($user);
+        Auth::login($user, true);
     
         return redirect()->to('/redirect?type=login');
     }
@@ -50,7 +50,7 @@ class AuthWithSocialite extends Controller
                 'provider_id' => $userSocialite->getId()
             ]);
 
-            $user->roles()->sync(2);
+            $user->roles()->sync(1);
 
         }
 

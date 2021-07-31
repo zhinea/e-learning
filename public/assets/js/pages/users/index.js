@@ -25,8 +25,9 @@
 			   	{data: 'DT_RowIndex', searchable: false, orderable: false},
 			    { data: 'name', name: 'users.name' },
 			    { data: 'email', name: 'users.email' },
+			    { data: 'provider_name', name: 'users.provider_name', searchable: false, orderable: false },
 			    { name: 'users.role', searchable: false, orderable: false  },
-			    { data: '', searchable: false }
+			    { data: '', searchable: false, orderable: false }
 		  	],
 		  	dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
 		    columnDefs: [
@@ -85,6 +86,15 @@
 			    },
 			    {
 			    	targets: 3,
+			    	title: 'Provider',
+			    	orderable: false,
+			    	searchable: false,
+			    	render: function(data, type, full, meta){
+			    		return `${full.provider_name}`.toTitleCase();
+			    	}
+			    },
+			    {
+			    	targets: 4,
 			    	title: 'Role',
 			    	orderable: false,
 			    	render: function(data, type, full, meta){
@@ -242,8 +252,12 @@
 				$('.modal-body input.is-invalid').removeClass('is-invalid');
 				
 				if(er.status != 422){
-					$.fn.toast('error', 'Error', 'Sorry something wrong in here.');
+					return $.fn.toast('error', 'Error', 'Sorry something wrong in here.');
 				}
+
+				$submitButton.removeAttr('disabled');
+				$submitButton.find('.main-text').show();
+				$submitButton.find('.loader').hide();
 
 				$.fn.toast('warning', 'Warning', 'Silahkan isi input lagi dengan benar!');
 

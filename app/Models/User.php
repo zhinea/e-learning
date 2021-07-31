@@ -36,6 +36,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'provider_id'
     ];
 
     /**
@@ -76,7 +77,7 @@ class User extends Authenticatable
 
 
     public function getIsAdminAttribute(){
-        return $this->role == self::ADMIN;
+        return in_array(self::ADMIN, $this->roles()->get()->pluck('id')->toArray());
     }
 
     public function roles(){

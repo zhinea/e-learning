@@ -35,6 +35,7 @@
                                 <th></th>
                                 <th>User</th>
                                 <th>Email</th>
+                                <th>Provider</th>
                                 <th>Role</th>
                                 <th>Actions</th>
                             </tr>
