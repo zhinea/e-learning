@@ -14,3 +14,11 @@ if(!function_exists('active_menu')){
 		return request()->is($url) ? 'active' : '';
 	}
 }
+
+
+if(!function_exists('usercontent')){
+
+	function usercontent($url){
+		return url('/storage/usercontent/' . $url);
+	}
+}

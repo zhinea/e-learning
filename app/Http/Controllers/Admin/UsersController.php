@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Traits\Authenticator;
 use Illuminate\Validation\Rule;
+use Gate;
 
 class UsersController extends Controller
 {
@@ -69,9 +70,7 @@ class UsersController extends Controller
             'roles' => 'required|integer|exists:roles,id'
         ]);
 
-        $user = User::create($request->only('name', 'email') + [
-            'password' => bcrypt($request->input('password'))
-        ]);
+        $user = User::create($request->only('name', 'email', 'password'));
 
         $user->roles()->sync($request->input('roles'));
 
@@ -102,7 +101,9 @@ class UsersController extends Controller
     {
         $user->load('roles');
 
-        return view('admin.pages.users.edit', compact('user'));
+        $roles = Role::orderBy('title')->get();
+
+        return view('admin.pages.users.edit', compact('user', 'roles'));
     }
 
     /**

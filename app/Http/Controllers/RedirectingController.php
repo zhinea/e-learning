@@ -29,8 +29,7 @@ class RedirectingController extends Controller
 
                 return redirect()->to((auth()->user()->is_admin) ? '/staff/dashboard' : '/dashboard');
 
-                break;
-            
+                break;            
             default:
                 
                 redirect()->to('/');

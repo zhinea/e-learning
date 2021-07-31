@@ -150,7 +150,38 @@
                                     <button class="btn btn-primary btn-block" tabindex="4">Login</button>
                                 </form>
                                 <p class="text-center mt-2"><span>New on our platform?</span><a href="{{ route('register') }}"><span>&nbsp;Create an account</span></a></p>
-                               
+
+                                <div class="divider my-2">
+                                    <div class="divider-text">or</div>
+                                </div>
+                                <div class="auth-footer-btn d-flex justify-content-center">
+                                    <a class="btn btn-facebook" 
+                                       href="{{ route('auth.socialite') }}?client=facebook"
+                                       data-toggle="tooltip"
+                                       data-original-title="Login Dengan Facebook"
+                                       >
+                                        <i data-feather="facebook"></i>
+                                    </a>
+                                    <a class="btn btn-google" 
+                                       href="{{ route('auth.socialite') }}?client=google"
+                                       data-toggle="tooltip"
+                                       data-original-title="Login Dengan Google">
+                                        <i data-feather="mail"></i>
+                                    </a>
+                                    <a class="btn btn-twitter white" 
+                                       href="javascript:void(0)"
+                                       data-toggle="tooltip"
+                                       data-original-title="Login Dengan Twitter">
+                                        <i data-feather="twitter"></i>
+                                    </a>
+                                    <a class="btn btn-github" 
+                                       href="javascript:void(0)"
+                                       data-toggle="tooltip"
+                                       data-original-title="Login Dengan Github">
+                                        <i data-feather="github"></i>
+                                    </a>
+                                </div>
+                                   
                             </div>
                         </div>
                         <!-- /Login-->

@@ -23,7 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'provider_name',
+        'provider_id',
+        'photo_profile'
     ];
 
     /**
@@ -55,6 +57,12 @@ class User extends Authenticatable
     public const ADMIN = 1 ;
 
 
+    public const STATUS = [
+        'active' => 'allow',
+        'deactive' => 'abort',
+        'blocked' => 'abort'
+    ];
+
     public function getLoginMessageAttribute(){
 
         $message = "Selamat datang {$this->name}";
@@ -74,4 +82,11 @@ class User extends Authenticatable
     public function roles(){
         return $this->belongsToMany(Role::class);
     }
+
+    public function setPasswordAttribute($password){
+        return $this->attributes['password'] = bcrypt($password);
+    }
+
+
 }
+

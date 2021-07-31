@@ -31,6 +31,7 @@ Route::middleware(['auth'])
 });
 
 
+
 Route::get('/redirect', RedirectingController::class);
 
 
